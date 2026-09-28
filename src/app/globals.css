@@ -1,26 +1,91 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
+/* Palette: warm paper, deep ink, an emerald-teal brand (calm, data-ish)
+   and a coral accent used sparingly for highlights. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fbfaf6;
+  --surface: #ffffff;
+  --ink: #17212b;
+  --muted: #5b6573;
+  --line: #e7e3da;
+  --brand: #0e7c66;
+  --brand-deep: #0a5c4c;
+  --brand-soft: #e3f2ee;
+  --accent: #e0784f;
+  --accent-soft: #fbe9e1;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+}
+
+/* Article typography tuned to the palette */
+.prose-article {
+  --tw-prose-body: var(--ink);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-links: var(--brand);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-quotes: var(--ink);
+  --tw-prose-quote-borders: var(--brand);
+  --tw-prose-bullets: var(--brand);
+  --tw-prose-counters: var(--brand);
+  --tw-prose-code: var(--brand-deep);
+  --tw-prose-hr: var(--line);
+  --tw-prose-th-borders: var(--line);
+  --tw-prose-td-borders: var(--line);
+}
+.prose-article :where(h2, h3) {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.prose-article :where(code):not(pre code) {
+  background: var(--brand-soft);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3em;
+  font-weight: 500;
+}
+.prose-article :where(code):not(pre code)::before,
+.prose-article :where(code):not(pre code)::after {
+  content: none;
+}
+.prose-article :where(pre) {
+  background: #14202a;
+  border-radius: 0.75rem;
+}
+.prose-article :where(img) {
+  border-radius: 0.75rem;
+  border: 1px solid var(--line);
+}
+.prose-article :where(blockquote) {
+  font-style: normal;
+  background: var(--brand-soft);
+  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 0.5rem 1.25rem;
 }
