@@ -25,7 +25,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      {/* Browser extensions such as Grammarly add attributes to <body> before React
+          hydrates. This silences that mismatch for <body>'s own attributes only;
+          real mismatches inside the page are still reported. */}
+      <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
