@@ -56,7 +56,7 @@ export default async function Home() {
           <div className="relative mx-auto w-full max-w-xs">
             {profile.photo ? (
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-brand-soft shadow-[0_24px_60px_-30px_rgba(23,33,43,0.45)]">
-                <Image src={profile.photo} alt={profile.name} fill priority sizes="320px" className="object-cover" />
+                <Image src={profile.photo} alt={profile.name} fill priority sizes="320px" className="object-cover object-top" />
               </div>
             ) : (
               <div className="rounded-[2rem] border border-line bg-surface p-7 shadow-[0_24px_60px_-30px_rgba(23,33,43,0.35)]">

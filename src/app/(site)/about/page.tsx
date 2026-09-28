@@ -13,7 +13,7 @@ export default async function AboutPage() {
       <aside className="md:sticky md:top-28 md:self-start">
         {p.photo && (
           <div className="relative mb-6 aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-brand-soft">
-            <Image src={p.photo} alt={p.name} fill sizes="320px" className="object-cover" />
+            <Image src={p.photo} alt={p.name} fill sizes="320px" className="object-cover object-top" />
           </div>
         )}
         <h1 className="font-display text-3xl font-semibold tracking-tight">{p.name}</h1>
