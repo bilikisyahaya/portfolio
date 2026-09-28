@@ -1,0 +1,100 @@
+---
+title: What a Five-Month Sales Table Taught Me About Thinking Like an Analyst
+summary: >-
+  My first lesson in data analysis was a table of five numbers. The obvious
+  answer was which month sold the most. The useful question was why April
+  fell.
+publishedDate: 2026-09-28
+topics:
+  - learning-log
+  - excel
+draft: false
+---
+A few weeks ago I couldn't have told you what a data analyst actually does. I knew businesses "used data", but I pictured spreadsheets full of numbers that somebody stared at until an answer appeared.
+
+The lesson that changed that for me was a table with five rows.
+
+{% table %}
+* Month
+* Sales
+---
+* January
+* ₦300,000
+---
+* February
+* ₦450,000
+---
+* March
+* ₦500,000
+---
+* April
+* ₦350,000
+---
+* May
+* ₦600,000
+{% /table %}
+
+## The obvious answer, and the better question
+
+The first question anyone asks of a table like this is "which month did best?" May, at ₦600,000. January was the weakest at ₦300,000. Sales doubled over the five months.
+
+That answer is correct, and it's also the least useful thing in the table.
+
+Look at April. After three months of steady growth, sales fell from ₦500,000 to ₦350,000. That is a **30% drop** in a single month. Then May jumped back up by more than 70%.
+
+A drop like that is where the real work starts. Did a competitor open nearby? Did a popular product run out of stock? Was there a price change, a holiday, a problem with a supplier? The numbers can't tell you why. What they can do is tell you exactly where to look.
+
+That was the moment the job made sense to me. An analyst doesn't stop at "what happened". They follow it with "why did it happen?" and "what should we do next?", and they answer with evidence instead of guesses.
+
+## The process, as I understand it so far
+
+Every lesson since has followed the same shape:
+
+**Raw data → clean it → analyse it → find the pattern → explain it → support a decision**
+
+"Data" sounded abstract until I realised it's just the records a business already keeps: what it sold, at what price, to how many customers, what it spent, and what was left over as profit. The skill is in turning those records into an answer someone can act on.
+
+## My first Excel formula, and my first mistake
+
+Excel is the first tool on my list, so I started with the basics. A spreadsheet is a grid: columns run down and are named with letters, rows run across and are numbered, and each box where they meet is a cell. `A2` means column A, row 2.
+
+Every formula starts with an equals sign. The first one I wrote calculates revenue:
+
+**Revenue = Quantity × Price**
+
+If a shop sells 5 bags at ₦10,000 each, that's ₦50,000. With the quantity in B2 and the price in C2, the formula is:
+
+```
+=B2*C2
+```
+
+Then I tried a second example: 3 pairs of shoes at ₦20,000 each. I worked it out as ₦6,000.
+
+It's ₦60,000.
+
+It was a small slip, but it taught me something I won't forget. When a number feels too small or too large, stop and check it against common sense before you trust it. Three pairs of shoes at ₦20,000 can't cost less than one pair. Excel won't make that arithmetic mistake, but it will happily calculate whatever wrong formula you give it. Checking whether an answer is reasonable is the analyst's job, not the software's.
+
+## "This product is bad" is not an analysis
+
+The idea that has stayed with me most is that low numbers are a question, not a verdict.
+
+If a product isn't selling, the lazy conclusion is that the product is bad. The analyst's version asks:
+
+- Do customers even know the product exists?
+- Is the price too high for what it offers?
+- Is the marketing reaching the right people?
+- Are customers choosing a different product instead?
+
+Each of those has a different fix. Deciding which one is true, using the data, is the difference between a guess and an evidence-based decision.
+
+## Where I'm going from here
+
+The path I'm following:
+
+**Data analysis basics → Excel → SQL → Power BI → real projects → portfolio → CV → job applications**
+
+I'm still at the Excel stage. Next on my list are `SUM` and `AVERAGE`, which would total and average that sales table in one step. After that come pivot tables, then SQL, then Power BI, where I want to turn tables like this one into dashboards. Python comes later.
+
+I'm writing each step down as I learn it, partly to make it stick and partly because someone else starting out might find it useful. I don't need to understand everything at once. I just need to understand the next thing, and keep going.
+
+If you're on the same path, I'd love to compare notes.
