@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  axes: ["opsz", "SOFT"],
-});
+const mono = JetBrains_Mono({ variable: "--font-mono-jb", subsets: ["latin"] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bilikisyahaya.vercel.app";
 
@@ -24,12 +21,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${inter.variable} ${mono.variable} h-full antialiased`}
+    >
+      <head>
+        {/* Runs before first paint: the saved choice, otherwise dark. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
+          }}
+        />
+      </head>
       {/* Browser extensions such as Grammarly add attributes to <body> before React
           hydrates. This silences that mismatch for <body>'s own attributes only;
           real mismatches inside the page are still reported. */}
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         {children}
+        <Analytics />
       </body>
     </html>
   );

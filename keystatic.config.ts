@@ -73,6 +73,30 @@ export default config({
           directory: "public/images/profile",
           publicPath: "/images/profile/",
         }),
+        highlights: fields.array(
+          fields.object({
+            kind: fields.select({
+              label: "Type",
+              options: [
+                { label: "Event", value: "event" },
+                { label: "Certificate", value: "certificate" },
+                { label: "Course", value: "course" },
+                { label: "Award", value: "award" },
+              ],
+              defaultValue: "event",
+            }),
+            title: fields.text({ label: "Title", description: "e.g. Deep Learning Indaba 2026" }),
+            role: fields.text({ label: "Role or result", description: "e.g. Attendee, Certified, Completed" }),
+            detail: fields.text({ label: "One-line description", multiline: true }),
+            date: fields.text({ label: "Date", description: "e.g. August 2026" }),
+            url: fields.url({ label: "Link (optional)" }),
+          }),
+          {
+            label: "Highlights (events, certificates, courses)",
+            description: "Shown on the home page. Add a certificate here the day you earn it.",
+            itemLabel: (props) => props.fields.title.value || "New highlight",
+          },
+        ),
         cv: fields.file({
           label: "CV (PDF)",
           directory: "public/files",

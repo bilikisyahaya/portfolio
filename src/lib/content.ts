@@ -46,6 +46,7 @@ export const getProfile = cache(async () => {
       github: null,
       photo: null,
       cv: null,
+      highlights: [],
       about: async () => ({ node: Markdoc.parse("") }),
     }
   );

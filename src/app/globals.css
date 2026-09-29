@@ -1,19 +1,44 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* Palette: warm paper, deep ink, an emerald-teal brand (calm, data-ish)
-   and a coral accent used sparingly for highlights. */
+/* Light and dark share one identity: deep navy ink, a teal brand, coral accent. */
 :root {
-  --paper: #fbfaf6;
+  color-scheme: light;
+  --paper: #f8fafc;
   --surface: #ffffff;
-  --ink: #17212b;
-  --muted: #5b6573;
-  --line: #e7e3da;
-  --brand: #0e7c66;
-  --brand-deep: #0a5c4c;
-  --brand-soft: #e3f2ee;
+  --ink: #0b1220;
+  --muted: #526071;
+  --line: #e2e8f0;
+  --brand: #0a7f6a;
+  --brand-deep: #0f766e;
+  --brand-soft: #dff5ef;
+  --brand-hover: #086554;
+  --on-brand: #ffffff;
   --accent: #e0784f;
-  --accent-soft: #fbe9e1;
+  --accent-soft: #fdebe3;
+  --inverse: #0b1220;
+  --on-inverse: #f8fafc;
+  --grid: rgba(11, 18, 32, 0.05);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #070a13;
+  --surface: #0d1220;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --line: #1c2433;
+  --brand: #2dd4b0;
+  --brand-deep: #99f0dc;
+  --brand-soft: #0e2a29;
+  --brand-hover: #5eead4;
+  --on-brand: #04120f;
+  --accent: #f0946c;
+  --accent-soft: #2a1a14;
+  --inverse: #0d1220;
+  --on-inverse: #f8fafc;
+  --grid: rgba(148, 163, 184, 0.07);
 }
 
 @theme inline {
@@ -27,8 +52,13 @@
   --color-brand-soft: var(--brand-soft);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-brand-hover: var(--brand-hover);
+  --color-on-brand: var(--on-brand);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, monospace;
 }
 
 html {
@@ -38,6 +68,7 @@ html {
 body {
   background: var(--paper);
   color: var(--ink);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 ::selection {
@@ -60,10 +91,18 @@ body {
   --tw-prose-th-borders: var(--line);
   --tw-prose-td-borders: var(--line);
 }
+/* Comfortable reading rhythm for long-form text */
+.prose-article :where(p, li) {
+  line-height: 1.8;
+}
+.prose-article :where(p) {
+  margin-top: 0;
+  margin-bottom: 1.35em;
+}
+
 .prose-article :where(h2, h3) {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 .prose-article :where(code):not(pre code) {
   background: var(--brand-soft);
@@ -88,4 +127,13 @@ body {
   background: var(--brand-soft);
   border-radius: 0 0.75rem 0.75rem 0;
   padding: 0.5rem 1.25rem;
+}
+
+/* Faint grid behind the hero, fading out towards the edges */
+.hero-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 40%, transparent 100%);
 }

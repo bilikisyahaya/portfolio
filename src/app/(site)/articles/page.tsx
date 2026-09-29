@@ -5,7 +5,7 @@ import { TopicChip } from "@/components/topic-chip";
 import { formatDate, getArticles, labelForTopic, readingMinutes } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Articles",
+  title: "Insights",
   description: "Notes and lessons from learning Excel, SQL and Power BI.",
 };
 
@@ -20,11 +20,11 @@ export default async function ArticlesPage(props: PageProps<"/articles">) {
   );
 
   return (
-    <div className="mx-auto max-w-5xl px-5 pt-16">
-      <p className="text-sm font-semibold uppercase tracking-wider text-accent">Writing</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Articles</h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted">
-        What I&apos;m learning about business intelligence, written down as I go.
+    <div className="mx-auto max-w-6xl px-6 pb-24 pt-16 lg:px-10 lg:pt-24">
+      <p className="font-mono text-sm font-medium text-brand sm:text-base">Insights</p>
+      <h1 className="mt-4 text-5xl font-bold tracking-tight lg:text-6xl">Insights</h1>
+      <p className="mt-5 max-w-2xl text-lg text-muted lg:text-xl">
+        Practical writing on data analysis, reporting and the business questions behind the numbers.
       </p>
 
       {topics.length > 1 && (

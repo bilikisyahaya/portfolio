@@ -1,158 +1,243 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArticleCard } from "@/components/article-card";
-import { EmptyState } from "@/components/empty-state";
+import { Band, SectionHeading } from "@/components/band";
+import { ArrowUpRight, LinkedInIcon, MailIcon, PinIcon } from "@/components/icons";
 import { formatDate, getArticles, getProfile, getProjects, labelForTopic, readingMinutes } from "@/lib/content";
 
-const PATH = [
-  { topic: "excel", step: "01", title: "Excel", blurb: "Cleaning data, formulas, pivot tables and the habits that make a spreadsheet trustworthy." },
-  { topic: "sql", step: "02", title: "SQL", blurb: "Asking questions of real databases: filtering, joining and summarising tables." },
-  { topic: "power-bi", step: "03", title: "Power BI", blurb: "Modelling data and turning it into dashboards that someone can make a decision from." },
+const VALUE = [
+  {
+    title: "Business understanding",
+    body: "A Business Administration background means I start from how the business actually runs: sales, costs, customers and people, and the decision the numbers need to support.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-6"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18" /></svg>
+    ),
+  },
+  {
+    title: "Analytical thinking",
+    body: "I look past what happened to why it happened and what should change next, and I sanity-check every figure before it reaches a decision-maker.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-6"><path d="M3 3v18h18" /><path d="m7 15 4-4 3 3 5-6" /></svg>
+    ),
+  },
+  {
+    title: "Clear communication",
+    body: "Findings only matter if people act on them. I explain results in plain language, with the context a manager needs to make the call.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-6"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z" /><path d="M8 9h8M8 13h5" /></svg>
+    ),
+  },
+];
+
+const ic = "size-5";
+const HIGHLIGHT_ICONS: Record<string, React.ReactNode> = {
+  event: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={ic} aria-hidden><rect x="3" y="4" width="18" height="17" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>,
+  certificate: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={ic} aria-hidden><circle cx="12" cy="9" r="5" /><path d="m8.5 13 -1.5 8 5-3 5 3-1.5-8" /></svg>,
+  course: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={ic} aria-hidden><path d="M2 9 12 4l10 5-10 5Z" /><path d="M6 11v5c3 2 9 2 12 0v-5" /></svg>,
+  award: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={ic} aria-hidden><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0Z" /><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3" /></svg>,
+};
+
+const TOOLS = [
+  { name: "Microsoft Excel", note: "Formulas, calculations, reporting" },
+  { name: "SQL", note: "Querying and summarising data" },
+  { name: "Power BI", note: "Dashboards and data models" },
+  { name: "Python", note: "Automation and analysis" },
 ];
 
 export default async function Home() {
-  const [profile, articles, projects] = await Promise.all([getProfile(), getArticles(), getProjects()]);
-  const latest = articles.slice(0, 3);
-  const withMinutes = await Promise.all(
-    latest.map(async (a) => ({ ...a, minutes: readingMinutes((await a.entry.content()).node) })),
+  const [p, articles, projects] = await Promise.all([getProfile(), getArticles(), getProjects()]);
+  const latest = await Promise.all(
+    articles.slice(0, 3).map(async (a) => ({ ...a, minutes: readingMinutes((await a.entry.content()).node) })),
   );
-  const countFor = (topic: string) => articles.filter((a) => a.entry.topics.includes(topic)).length;
 
   return (
     <>
-      {/* Hero */}
+      {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-32 -top-32 size-[28rem] rounded-full bg-brand-soft blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 top-40 size-72 rounded-full bg-accent-soft blur-3xl" />
-        <div className="relative mx-auto grid max-w-5xl items-center gap-12 px-5 pb-20 pt-16 md:grid-cols-[1.35fr_1fr] md:pt-24">
+        <div className="pointer-events-none absolute -right-40 -top-48 size-[40rem] rounded-full bg-brand/10 blur-3xl" />
+        <div className="pointer-events-none absolute -left-40 top-64 size-[26rem] rounded-full bg-accent/10 blur-3xl" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pb-24 pt-16 lg:grid-cols-[1.35fr_1fr] lg:px-10 lg:pb-32 lg:pt-24">
           <div>
-            {profile.currentlyLearning && (
-              <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-muted">
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />
-                  <span className="relative inline-flex size-2 rounded-full bg-accent" />
-                </span>
-                Currently learning: <span className="text-ink">{profile.currentlyLearning}</span>
-              </p>
+            <p className="inline-flex items-center gap-2.5 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5 text-sm font-medium text-brand">
+              <span className="size-2 rounded-full bg-brand" />
+              Open to junior BI &amp; data analyst roles
+            </p>
+            <h1 className="mt-7 text-5xl font-bold leading-[1.04] tracking-tight sm:text-6xl xl:text-7xl">{p.name}</h1>
+            {p.headline && <p className="mt-5 text-2xl font-semibold text-brand sm:text-[1.75rem]">{p.headline}</p>}
+            <p className="mt-7 max-w-2xl text-xl leading-relaxed text-ink/90 lg:text-2xl lg:leading-relaxed">
+              I turn business questions into clear, data-driven answers.
+            </p>
+            {p.intro && <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{p.intro}</p>}
+            {p.location && (
+              <p className="mt-6 flex items-center gap-2 text-muted"><PinIcon /> {p.location}</p>
             )}
-            <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-              {profile.name}
-            </h1>
-            {profile.headline && (
-              <p className="mt-4 font-display text-xl text-brand sm:text-2xl">{profile.headline}</p>
-            )}
-            {profile.intro && <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">{profile.intro}</p>}
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/articles" className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-deep">
-                Read my articles
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Link href="#contact" className="inline-flex items-center gap-2 rounded-lg bg-brand px-6 py-3.5 font-semibold text-on-brand transition-colors hover:bg-brand-hover">
+                <MailIcon /> Contact me
               </Link>
-              <Link href="/about" className="rounded-full border border-line bg-surface px-6 py-3 text-sm font-semibold transition-colors hover:border-brand hover:text-brand">
-                About me
+              <Link href="#insights" className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold transition-colors hover:border-brand hover:text-brand">
+                Read my insights <ArrowUpRight />
               </Link>
+              {p.linkedin && (
+                <a href={p.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="grid size-[3.1rem] place-items-center rounded-lg border border-line bg-surface text-muted hover:border-brand hover:text-brand">
+                  <LinkedInIcon />
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Portrait, or a small chart as a nod to the field until a photo is added */}
-          <div className="relative mx-auto w-full max-w-xs">
-            {profile.photo ? (
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-brand-soft shadow-[0_24px_60px_-30px_rgba(23,33,43,0.45)]">
-                <Image src={profile.photo} alt={profile.name} fill priority sizes="320px" className="object-cover object-top" />
-              </div>
-            ) : (
-              <div className="rounded-[2rem] border border-line bg-surface p-7 shadow-[0_24px_60px_-30px_rgba(23,33,43,0.35)]">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted">Learning progress</p>
-                <div className="mt-6 flex h-40 items-end gap-3">
-                  {[38, 55, 47, 72, 64, 90].map((h, i) => (
-                    <div key={i} className="flex-1 rounded-t-md bg-brand/85" style={{ height: `${h}%`, opacity: 0.45 + i * 0.1 }} />
-                  ))}
+          {p.photo && (
+            <div className="relative mx-auto w-full max-w-sm lg:mr-0">
+              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-brand/30 via-transparent to-accent/20 blur-2xl" />
+              {/* Light mode: a white mount, soft teal shadow and a small lift, so the photo's
+                  grey studio backdrop doesn't look dull against the pale page. */}
+              <div className="relative rounded-[1.75rem] bg-white p-2 shadow-[0_30px_60px_-30px_rgba(10,127,106,0.35)] ring-1 ring-line dark:bg-transparent dark:p-0 dark:shadow-2xl dark:shadow-black/30 dark:ring-0">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.35rem] border border-line bg-surface dark:rounded-3xl">
+                  <Image src={p.photo} alt={p.name} fill priority sizes="(min-width: 1024px) 384px, 90vw" className="object-cover object-top brightness-[1.07] saturate-[1.06] dark:brightness-100 dark:saturate-100" />
                 </div>
-                <div className="mt-3 h-px bg-line" />
-                <p className="mt-4 font-display text-lg font-semibold">One step at a time.</p>
               </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Learning path */}
-      <section className="mx-auto max-w-5xl px-5">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">The path</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">From spreadsheets to dashboards</h2>
-          </div>
-        </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {PATH.map((p) => {
-            const n = countFor(p.topic);
-            return (
-              <Link key={p.topic} href={`/articles?topic=${p.topic}`} className="group rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-brand/50">
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-3xl font-semibold text-brand/30 transition-colors group-hover:text-brand">{p.step}</span>
-                  <span className="rounded-full bg-paper px-2.5 py-1 text-xs font-medium text-muted">
-                    {n} {n === 1 ? "article" : "articles"}
-                  </span>
-                </div>
-                <h3 className="mt-4 font-display text-xl font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{p.blurb}</p>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Latest writing */}
-      <section className="mx-auto mt-24 max-w-5xl px-5">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Writing</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">Latest articles</h2>
-          </div>
-          {articles.length > 3 && (
-            <Link href="/articles" className="text-sm font-semibold text-brand hover:text-brand-deep">
-              All articles →
-            </Link>
-          )}
-        </div>
-        <div className="mt-8">
-          {withMinutes.length ? (
-            <div className="grid gap-5 md:grid-cols-3">
-              {withMinutes.map((a) => (
-                <ArticleCard
-                  key={a.slug}
-                  href={`/articles/${a.slug}`}
-                  title={a.entry.title}
-                  summary={a.entry.summary}
-                  date={formatDate(a.entry.publishedDate)}
-                  minutes={a.minutes}
-                  chips={a.entry.topics.map(labelForTopic)}
-                  cover={a.entry.cover}
-                />
-              ))}
             </div>
-          ) : (
-            <EmptyState title="The first article is on its way" body="Notes from the journey into business intelligence will appear here." />
           )}
         </div>
       </section>
 
-      {/* Projects teaser */}
-      <section className="mx-auto mt-24 max-w-5xl px-5">
-        <div className="overflow-hidden rounded-3xl bg-ink px-8 py-12 text-white md:px-12">
-          <p className="text-sm font-semibold uppercase tracking-wider text-accent">Projects</p>
-          <h2 className="mt-2 max-w-xl font-display text-3xl font-semibold tracking-tight">
-            {projects.length ? "Dashboards and analysis I've built" : "Dashboards are coming"}
-          </h2>
-          <p className="mt-3 max-w-xl text-white/70">
-            {projects.length
-              ? "Real datasets, real questions, and what the numbers said."
-              : "As each tool clicks, it gets put to work on a real dataset. The first project will be published here."}
-          </p>
-          <Link href="/projects" className="mt-7 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink transition-colors hover:bg-brand-soft">
-            {projects.length ? "See projects" : "Follow along"}
+      {/* ── What I bring ─────────────────────────────────── */}
+      <Band id="about" alt>
+        <SectionHeading
+          label="What I bring"
+          title="Business sense, backed by data"
+          intro="Analysts are valuable when they understand the business behind the numbers. That is where I start."
+        />
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
+          {VALUE.map((v) => (
+            <div key={v.title} className="rounded-2xl border border-line bg-paper p-8">
+              <span className="grid size-12 place-items-center rounded-xl bg-brand/10 text-brand">{v.icon}</span>
+              <h3 className="mt-6 text-xl font-bold tracking-tight">{v.title}</h3>
+              <p className="mt-3 text-[1.05rem] leading-relaxed text-muted">{v.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-line bg-paper p-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">Tools</p>
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {TOOLS.map((t) => (
+              <li key={t.name} className="rounded-xl border border-line bg-surface px-5 py-4">
+                <p className="font-semibold">{t.name}</p>
+                <p className="mt-1 text-sm text-muted">{t.note}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {p.highlights.length > 0 && (
+          <div className="mt-6 rounded-2xl border border-line bg-paper p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted">Highlights</p>
+            <ul className={`mt-5 grid gap-4 ${p.highlights.length > 1 ? "md:grid-cols-2" : ""}`}>
+              {p.highlights.map((h) => {
+                const inner = (
+                  <>
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent">{HIGHLIGHT_ICONS[h.kind]}</span>
+                    <div>
+                      <p className="text-lg font-semibold leading-snug">
+                        {h.title}
+                        {h.role && <span className="font-normal text-muted"> · {h.role}</span>}
+                      </p>
+                      {h.detail && <p className="mt-1 leading-relaxed text-muted">{h.detail}</p>}
+                      {h.date && <p className="mt-2 text-sm font-medium text-brand">{h.date}</p>}
+                    </div>
+                  </>
+                );
+                return (
+                  <li key={h.title}>
+                    {h.url ? (
+                      <a href={h.url} target="_blank" rel="noreferrer" className="flex gap-4 rounded-xl border border-line bg-surface p-5 transition-colors hover:border-brand/50">{inner}</a>
+                    ) : (
+                      <div className="flex gap-4 rounded-xl border border-line bg-surface p-5">{inner}</div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+        <Link href="/about" className="mt-8 inline-flex items-center gap-1.5 font-semibold text-brand hover:text-brand-hover">
+          More about me <ArrowUpRight />
+        </Link>
+      </Band>
+
+      {/* ── Insights ─────────────────────────────────────── */}
+      <Band id="insights">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionHeading label="Insights" title="Writing on data and business" intro="Practical notes on analysis, reporting and the questions behind the numbers." />
+          <Link href="/articles" className="inline-flex items-center gap-1.5 font-semibold text-brand hover:text-brand-hover">
+            All articles <ArrowUpRight />
           </Link>
         </div>
-      </section>
+        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {latest.map((a) => (
+            <ArticleCard
+              key={a.slug}
+              href={`/articles/${a.slug}`}
+              title={a.entry.title}
+              summary={a.entry.summary}
+              date={formatDate(a.entry.publishedDate)}
+              minutes={a.minutes}
+              chips={a.entry.topics.map(labelForTopic)}
+              cover={a.entry.cover}
+            />
+          ))}
+        </div>
+      </Band>
+
+      {/* ── Selected work ────────────────────────────────── */}
+      <Band id="work" alt>
+        <div className="grid items-center gap-10 lg:grid-cols-[1.5fr_1fr]">
+          <SectionHeading
+            label="Selected work"
+            title={projects.length ? "Case studies" : "Case studies in progress"}
+            intro={
+              projects.length
+                ? "Real datasets and business questions, from raw data to a recommendation."
+                : "Analyses built on real, public business data, each one taking a question from raw data to a clear recommendation. The first case study will be published here soon."
+            }
+          />
+          <div className="lg:text-right">
+            <Link href="/projects" className="inline-flex items-center gap-2 rounded-lg border border-line bg-paper px-6 py-3.5 font-semibold transition-colors hover:border-brand hover:text-brand">
+              {projects.length ? "View all work" : "See what's coming"} <ArrowUpRight />
+            </Link>
+          </div>
+        </div>
+      </Band>
+
+      {/* ── Contact ──────────────────────────────────────── */}
+      <Band id="contact">
+        <div className="relative overflow-hidden rounded-3xl border border-line bg-surface px-8 py-14 text-center sm:px-14">
+          <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[40rem] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+          <div className="relative">
+            <SectionHeading center label="Contact" title="Let's work together" />
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted lg:text-xl">
+              I&apos;m open to junior business intelligence and data analyst roles, internships and project work. If you have a question you think data could answer, I&apos;d be glad to hear from you.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              {p.email && (
+                <a href={`mailto:${p.email}`} className="inline-flex items-center gap-2 rounded-lg bg-brand px-6 py-3.5 font-semibold text-on-brand hover:bg-brand-hover">
+                  <MailIcon /> {p.email}
+                </a>
+              )}
+              {p.linkedin && (
+                <a href={p.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-line bg-paper px-6 py-3.5 font-semibold hover:border-brand hover:text-brand">
+                  <LinkedInIcon /> LinkedIn
+                </a>
+              )}
+              {!p.email && !p.linkedin && (
+                <Link href="/about" className="inline-flex items-center gap-2 rounded-lg bg-brand px-6 py-3.5 font-semibold text-on-brand hover:bg-brand-hover">
+                  About me <ArrowUpRight />
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </Band>
     </>
   );
 }

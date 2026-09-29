@@ -22,7 +22,7 @@ export async function generateMetadata(props: PageProps<"/articles/[slug]">): Pr
       title: a.title,
       description: a.summary,
       publishedTime: a.publishedDate ?? undefined,
-      images: a.cover ? [a.cover] : undefined,
+      ...(a.cover ? { images: [a.cover] } : {}),
     },
   };
 }
@@ -37,18 +37,18 @@ export default async function ArticlePage(props: PageProps<"/articles/[slug]">) 
   const older = i >= 0 && i < all.length - 1 ? all[i + 1] : null;
 
   return (
-    <article className="pt-14">
-      <header className="mx-auto max-w-3xl px-5">
+    <article className="pb-24 pt-14 lg:pt-20">
+      <header className="mx-auto max-w-[46rem] px-6">
         <Link href="/articles" className="text-sm font-medium text-muted hover:text-brand">
-          ← All articles
+          ← All insights
         </Link>
         <div className="mt-8 flex flex-wrap gap-1.5">
           {a.topics.map((t) => (
             <TopicChip key={t} label={labelForTopic(t)} href={`/articles?topic=${t}`} />
           ))}
         </div>
-        <h1 className="mt-5 font-display text-4xl font-semibold leading-[1.12] tracking-tight sm:text-5xl">{a.title}</h1>
-        {a.summary && <p className="mt-5 text-xl leading-relaxed text-muted">{a.summary}</p>}
+        <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.4rem]">{a.title}</h1>
+        {a.summary && <p className="mt-6 text-xl leading-relaxed text-muted lg:text-2xl">{a.summary}</p>}
         <p className="mt-6 text-sm text-muted">
           <span className="font-medium text-ink">{profile.name}</span> · {formatDate(a.publishedDate)} ·{" "}
           {readingMinutes(node)} min read
@@ -56,7 +56,7 @@ export default async function ArticlePage(props: PageProps<"/articles/[slug]">) 
       </header>
 
       {a.cover && (
-        <div className="mx-auto mt-10 max-w-4xl px-5">
+        <div className="mx-auto mt-10 max-w-5xl px-6">
           <div className="relative aspect-[16/8] overflow-hidden rounded-2xl border border-line bg-brand-soft">
             <Image src={a.cover} alt="" fill priority sizes="(min-width: 896px) 896px, 100vw" className="object-cover" />
           </div>

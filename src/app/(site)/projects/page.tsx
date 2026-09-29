@@ -6,17 +6,17 @@ import { TopicChip } from "@/components/topic-chip";
 import { getProjects, labelForTool } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Projects",
+  title: "Work",
   description: "Dashboards and analysis built with Excel, SQL and Power BI.",
 };
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
   return (
-    <div className="mx-auto max-w-5xl px-5 pt-16">
-      <p className="text-sm font-semibold uppercase tracking-wider text-accent">Work</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">Projects</h1>
-      <p className="mt-4 max-w-2xl text-lg text-muted">
+    <div className="mx-auto max-w-6xl px-6 pb-24 pt-16 lg:px-10 lg:pt-24">
+      <p className="font-mono text-sm font-medium text-brand sm:text-base">Selected work</p>
+      <h1 className="mt-4 text-5xl font-bold tracking-tight lg:text-6xl">Case studies</h1>
+      <p className="mt-5 max-w-2xl text-lg text-muted lg:text-xl">
         Each project starts with a real dataset and a business question, and ends with an answer someone could act on.
       </p>
       <div className="mt-10">
@@ -39,8 +39,8 @@ export default async function ProjectsPage() {
           </div>
         ) : (
           <EmptyState
-            title="The first project is in progress"
-            body="Once a tool clicks, it gets put to work on a real dataset. Dashboards and write-ups will be published here."
+            title="Case studies in progress"
+            body="Each case study takes a real business question from raw data to a clear recommendation. The first one will be published here soon."
           />
         )}
       </div>

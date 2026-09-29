@@ -1,30 +1,23 @@
 import Link from "next/link";
-import { NavLink } from "./nav-link";
+import { SectionNav } from "./nav-link";
+import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader({ name }: { name: string }) {
-  const initials = name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("");
+  const initials = name.split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("");
   return (
-    <header className="sticky top-0 z-20 border-b border-line/70 bg-paper/85 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3.5">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-full bg-brand font-display text-sm font-semibold text-white transition-transform group-hover:scale-105">
-            {initials}
-          </span>
-          <span className="hidden font-display text-lg font-semibold tracking-tight sm:inline">
-            {name}
-          </span>
+    <header className="sticky top-0 z-30 border-b border-line/80 bg-paper/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 lg:px-10">
+        <Link href="/" className="flex items-center gap-3">
+          <span className="grid size-10 place-items-center rounded-full bg-brand text-[15px] font-bold tracking-tight text-on-brand">{initials}</span>
+          <span className="text-lg font-bold tracking-tight">{name}</span>
         </Link>
-        <nav className="flex items-center gap-1">
-          <NavLink href="/articles">Articles</NavLink>
-          <NavLink href="/projects">Projects</NavLink>
-          <NavLink href="/about">About</NavLink>
-        </nav>
+        <div className="flex items-center gap-8">
+          <SectionNav className="hidden items-center gap-8 md:flex" />
+          <ThemeToggle />
+        </div>
       </div>
+      {/* phones: a row of section links under the bar */}
+      <SectionNav className="flex gap-7 overflow-x-auto border-t border-line/60 px-6 py-2.5 md:hidden" />
     </header>
   );
 }
